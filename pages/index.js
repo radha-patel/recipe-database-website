@@ -1,11 +1,30 @@
 import Head from 'next/head'
 import styles from '../styles/Home.module.css'
 import fetch from "isomorphic-unfetch"
+import { useState, useEffect } from 'react';
+import Link from 'next/link'
 
-const defaultEndpoint = `https://www.themealdb.com/api/json/v1/1/search.php?s`
+const defaultEndpoint = `https://www.themealdb.com/api/json/v1/1/search.php?s=`
+const value = "";
+
+/*
+export async function getServerSideProps({ value = ""}) {
+  const res
+  if (value) {
+    res = await fetch(defaultEndpoint)
+  } else {
+    res = await fetch(`${defaultEndpoint}=${value}`)
+  }
+  const data = await res.json();
+  return {
+    props: {
+      data
+    }
+  }
+} */
 
 export async function getServerSideProps() {
-  const res = await fetch(defaultEndpoint)
+  const res = await fetch(defaultEndpoint);
   const data = await res.json();
   return {
     props: {
@@ -16,8 +35,20 @@ export async function getServerSideProps() {
 
 export default function Home({ data }) {
   console.log('data', data);
-
   const { meals = [] } = data;
+
+  function handleOnSubmitSearch(e) {
+    e.preventDefault();
+
+    const { currentTarget = {} } = e;
+    const fields = Array.from(currentTarget?.elements);
+    const fieldQuery = fields.find(field => field.name === 'query');
+    const value = fieldQuery.value || '';
+    const endpoint = `https://www.themealdb.com/api/json/v1/1/search.php?s=${value}`;
+    
+    /*getServerSideProps()*/
+    /*getServerSideProps( value );*/
+  }
 
   return (
     <div className={styles.container}>
@@ -30,19 +61,26 @@ export default function Home({ data }) {
         <h1 className={styles.title}>
           Recipies Galore
         </h1>
-
         <p className={styles.description}>
           Need ideas? Well look no further.
         </p>
+
+        <form className={styles.search} onSubmit={handleOnSubmitSearch}>
+          <input name="query" type="search"/>
+          <button>Search</button>
+        </form>
+
         <ul className={styles.grid}>
           {meals.map(result => {
-            const { idMeal, strMeal } = result;
+            const { idMeal, strMeal, strMealThumb } = result;
             return (
               <li key={idMeal} className={styles.card}>
-                <a href="#">
-
-                  <h3>{ strMeal }</h3>
-                </a>
+                <Link href="/food/[strMeal]" as={`/food/${strMeal}`}>
+                  <a href="#">
+                    <img className={styles.food_picture} src={strMealThumb} alt={`${strMeal} Thumbnail`}/>
+                    <h3 className={styles.food_label}>{ strMeal }</h3>
+                  </a>
+                </Link>
               </li>
             )
           })}

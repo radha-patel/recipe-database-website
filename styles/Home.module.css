@@ -125,3 +125,40 @@
     flex-direction: column;
   }
 }
+
+.food_picture {
+  border-radius: 5px;
+  width: 250px;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.food_label {
+  text-align: center;
+}
+
+.search input {
+  margin-right: .5em;
+}
+
+@media (max-wdith: 600px) {
+  .search input {
+    margin-right: 0;
+    margin-bottom: .5em;
+  }
+
+  .search input, 
+  .search button {
+    width: 100%;
+  }
+}
+
+.profile {
+  margin-top: 2em;
+}
+
+.back {
+  color: blue;
+  text-decoration: underline;
+}
