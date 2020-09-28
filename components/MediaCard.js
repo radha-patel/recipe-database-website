@@ -6,29 +6,25 @@ import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
-import Link from 'next/link'
+import Link from 'next/link';
 
-// const useStyles = makeStyles({
-//     root: {
-//         maxWidth: 345,
-//     },
-//     media: {
-//         height: 250,
-//     },
-// });
+const useStyles = makeStyles({
+    root: {
+        maxWidth: 345,
+    },
+    media: {
+        height: 250,
+    },
+});
 
 export default function MediaCard({ thumbnail, label }) {
-    // const classes = useStyles();
+    const classes = useStyles();
 
     return (
-        <Card className={{
-            maxWidth: 345
-        }}>
+        <Card className={classes.root}>
             <CardActionArea>
                 <CardMedia
-                    className={{
-                        height: 250
-                    }}
+                    className={classes.media}
                     image={thumbnail}
                     title={label}
                 />
