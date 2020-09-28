@@ -19,7 +19,7 @@ export async function getServerSideProps({ query }) {
 
 export default function Dish({ data }) {
   console.log('data', data);
-  const { meals = [] } = data;
+  const { meals } = data;
 
   return (
     <div className={styles.container}>
@@ -39,7 +39,7 @@ export default function Dish({ data }) {
           {meals.map(result => {
               const { idMeal, strMeal, strInstructions, strMealThumb } = result;
               return (
-                <div>
+                <div key={idMeal}>
                   <li key={idMeal} className={styles.profile}>
                     <img className={styles.food_picture} src={strMealThumb} alt={`${strMeal} Thumbnail`}/>
                     <h3 className={styles.food_label}>{ strMeal }</h3>
