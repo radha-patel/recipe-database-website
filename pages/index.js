@@ -1,30 +1,16 @@
-import Head from 'next/head'
-import styles from '../styles/Home.module.css'
-import fetch from "isomorphic-unfetch"
+import Head from 'next/head';
+import styles from '../styles/Home.module.css';
+import fetch from "isomorphic-unfetch";
 import { useState, useEffect } from 'react';
 import Link from 'next/link'
-import TextField from '@material-ui/core/TextField'
-import Button from '@material-ui/core/Button'
-import MediaCard from '../components/MediaCard'
+import TextField from '@material-ui/core/TextField';
+import Button from '@material-ui/core/Button';
+import MediaCard from '../components/MediaCard';
+import Checkbox from '@material-ui/core/Checkbox';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
 
 const defaultEndpoint = `https://www.themealdb.com/api/json/v1/1/search.php?s=`
 const value = "";
-
-/*
-export async function getServerSideProps({ value = ""}) {
-  const res
-  if (value) {
-    res = await fetch(defaultEndpoint)
-  } else {
-    res = await fetch(`${defaultEndpoint}=${value}`)
-  }
-  const data = await res.json();
-  return {
-    props: {
-      data
-    }
-  }
-} */
 
 export async function getServerSideProps() {
   const res = await fetch(defaultEndpoint);
@@ -41,10 +27,8 @@ export default function Home({ data }) {
   const initialMeals = data.meals;
   const [ searchValue, setSearchValue ] = useState(''); 
   const [ meals, setMeals ] = useState(initialMeals);
-
-  // useEffect(() => {
-
-  // }, [meals])
+  const [ checked1, setChecked1] = useState(true);
+  const [ checked2, setChecked2] = useState(true);
 
   async function handleOnSubmitSearch(e) {
     e.preventDefault();
@@ -52,23 +36,43 @@ export default function Home({ data }) {
     const res = await fetch(endpoint);
     const data = await res.json();
     setMeals(data.meals);
-
-    // setMeals(data);
-    /*const { currentTarget = {} } = e;
-    const fields = Array.from(currentTarget?.elements);
-    const fieldQuery = fields.find(field => field.name === 'query');
-    const value = fieldQuery.value || '';
-    const endpoint = `https://www.themealdb.com/api/json/v1/1/search.php?s=${value}`;
-    
-    /*getServerSideProps()*/
-    /*getServerSideProps( value );
-
-    return(<h1>Testing</h1>)*/
   }
 
   function handleOnSearchChange(e) {
     setSearchValue(e.target.value);
   }
+
+  async function handleChange1(event) {
+    event.preventDefault();
+    setChecked1(event.target.checked);
+    if (!checked1) {
+      const endpoint = `https://www.themealdb.com/api/json/v1/1/filter.php?a=Indian`;
+      const res = await fetch(endpoint);
+      const data = await res.json();
+      setMeals(data.meals)
+    } else {
+      const endpoint = `https://www.themealdb.com/api/json/v1/1/search.php?s=`;
+      const res = await fetch(endpoint);
+      const data = await res.json();
+      setMeals(data.meals)
+    }
+  };
+
+  async function handleChange2(event) {
+    event.preventDefault();
+    setChecked2(event.target.checked);
+    if (!checked2) {
+      const endpoint = `https://www.themealdb.com/api/json/v1/1/filter.php?a=American`;
+      const res = await fetch(endpoint);
+      const data = await res.json();
+      setMeals(data.meals)
+    } else {
+      const endpoint = `https://www.themealdb.com/api/json/v1/1/search.php?s=`;
+      const res = await fetch(endpoint);
+      const data = await res.json();
+      setMeals(data.meals)
+    }
+  };
 
   return (
     <div className={styles.container}>
@@ -87,9 +91,30 @@ export default function Home({ data }) {
 
         <form className={styles.search} onChange={handleOnSearchChange} onSubmit={handleOnSubmitSearch}>
           <TextField id="standard-basic" label="Standard" />
-          <Button>Search</Button>
+          <Button type="submit">Search</Button>
         </form>
 
+        <div className={styles.checkbox}>
+        <FormControlLabel
+          control={
+            <Checkbox
+              checked1={checked1}
+              onChange={handleChange1}
+              inputProps={{ 'aria-label': 'primary checkbox' }}
+            />
+          }
+          label="Indian"/>
+          <FormControlLabel
+            control={
+              <Checkbox
+                checked={checked2}
+                onChange={handleChange2}
+                inputProps={{ 'aria-label': 'primary checkbox' }}
+              />
+            }
+          label="American"/>
+        </div>
+        
         <ul className={styles.grid}>
           {meals.map(result => {
             const { idMeal, strMeal, strMealThumb } = result;

@@ -162,3 +162,9 @@
   color: blue;
   text-decoration: underline;
 }
+
+.checkbox {
+  display: flex;
+  flex-direction: row;
+  color: black;
+}

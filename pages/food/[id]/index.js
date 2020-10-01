@@ -3,6 +3,7 @@ import styles from '../../../styles/Home.module.css'
 import fetch from "isomorphic-unfetch"
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import Container from '../../../components/Container';
 
 const defaultEndpoint = `https://www.themealdb.com/api/json/v1/1/search.php?s=`
 
@@ -44,7 +45,7 @@ export default function Dish({ data }) {
                     <img className={styles.food_picture} src={strMealThumb} alt={`${strMeal} Thumbnail`}/>
                     <h3 className={styles.food_label}>{ strMeal }</h3>
                   </li>
-                  <p>{ strInstructions }</p>
+                  <Container recipe={strInstructions} />
                 </div>
               )
             })}

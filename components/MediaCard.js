@@ -44,3 +44,5 @@ export default function MediaCard({ thumbnail, label }) {
         </Card>
     );
 }
+
+
